@@ -9,10 +9,43 @@
     regexp: '^ExecStart='
     line: 'ExecStart=/usr/bin/transmission-daemon -f -u {{ trans-user }} -v {{ trans-pass }} -t -a *.*.*.* -e /var/log/transmission/transmission.log --log-error'
 
-- name: Enable and Start Transmission Client Daemon
+- name: Decompress files
+  unarchive:
+    src: ../files/{{ item }}
+    dest: /opt/
+  with_items:
+    - noip.tgz
+    - couch.tgz
+    - sick.tgz
+
+- name: Copy systemd daemon files and plex rpm
+  copy:
+    src: ../files/{{ item.origin }}
+    dest: {{ item.destiny }}
+    owner: root
+    group: root
+  with_items:
+    - { origin: plexmediaserver.rpm, destiny: /tmp/ }
+    - { origin: sickbeard.service, destiny: /usr/lib/systemd/system/sickbeard.service }
+    - { origin: couchpotato.service, destiny: /usr/lib/systemd/system/couchpotato.service }
+
+- name: install noip
+  debug:
+    msg: "cd /opt/noip-2.1.9-1 && make && make install and answer questions about login etc."
+
+- local_action:
+  wait_for:
+    timeout: 20
+
+- name: Enable and Start Transmission, Couch and Sick 
   service:
-    name: transmission-daemon
+    name: {{ item }}
     state: started
     enabled: yes
+  with_items:
+    - transmission-daemon
+    - couchpotato
+    - sickbeard
+    - rc-local
 
 

@@ -1,0 +1,20 @@
+---
+- name: teste
+  hosts: localhost
+  become: true
+  gather_facts: true
+  tasks:
+  - name: teste
+    unarchive:
+      src: ../files/noip.tgz
+      dest: /opt/
+
+  - name: build noip
+    make: 
+      chdir: /opt/noip-2.1.9-1
+
+  - name: instala noip
+    make:
+      chdir: /opt/noip-2.1.9-1
+      target: install
+    become: yes
