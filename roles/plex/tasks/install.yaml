@@ -1,0 +1,18 @@
+- name: Install media apps
+  yum:
+    name: {{ packs2 }}
+    state: latest
+
+- name: Configure Transmission Torrent Client Daemon
+  lineinfile:
+    path: /usr/lib/systemd/system/transmission-daemon.service
+    regexp: '^ExecStart='
+    line: 'ExecStart=/usr/bin/transmission-daemon -f -u {{ trans-user }} -v {{ trans-pass }} -t -a *.*.*.* -e /var/log/transmission/transmission.log --log-error'
+
+- name: Enable and Start Transmission Client Daemon
+  service:
+    name: transmission-daemon
+    state: started
+    enabled: yes
+
+

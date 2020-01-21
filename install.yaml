@@ -1,0 +1,12 @@
+---
+- name: Media Server Self Service
+  hosts: alvo
+  become: yes
+  user: centos
+  gather_facts: true
+  pre_tasks:
+  - name: install python and pip and ansible
+    raw: 'yum install -y python2 python2-pip'
+  
+  roles:
+  - { role: plex }

@@ -1,0 +1,27 @@
+---
+# vars file for plex
+packs1:
+- epel-release
+- vim
+- wget 
+- tree 
+- lsof 
+- htop
+
+packs2:
+- aha
+- transmission-cli
+- transmission-daemon
+- transmission-common
+- transmission.x86_64
+- net-tools
+- bash-completion
+- gcc
+- unar
+- httpd
+- mutt
+
+trans-user: mane
+trans-pass: manesenha
+
+
